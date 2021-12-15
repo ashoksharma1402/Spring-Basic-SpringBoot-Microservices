@@ -142,8 +142,8 @@ public class Employee
 					.filter(e->e.getDepartment()=="HR")
 					.collect(Collectors.groupingBy(e->e.getDepartment(),Collectors.counting()));
 			System.out.println(totalEmployeeInHRDepartment1);
-// Average salary of Female employee
 			
+// Average salary of Female employee
 			Double avgSalaryOfFemaleEmployees = 
 					employeeList.stream()
 					.filter(e->e.getGender()=="Female")
