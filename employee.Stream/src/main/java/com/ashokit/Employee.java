@@ -154,6 +154,7 @@ public class Employee
 					employeeList.stream().filter(e->e.getGender()=="Female")
 					.collect(Collectors.groupingBy(Employee::getGender,Collectors.averagingDouble(Employee::getSalary)));
 			System.out.println(avgSalaryOfFemaleEmployees1);
-					
+
+//Get the details of highest paid employee in the organization?
 	}
 	}
