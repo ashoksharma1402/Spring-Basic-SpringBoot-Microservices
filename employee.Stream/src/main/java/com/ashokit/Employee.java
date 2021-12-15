@@ -73,10 +73,8 @@ public class Employee
 	                +", Salary : "+salary;
 	    }
 	    
-	public static void main(String args[]) 
-	{
-
-	//2) List Of Employees : employeeList
+	public static void main(String args[]) {
+//2) List Of Employees : employeeList
 
 	List<Employee> employeeList = new ArrayList<Employee>();
 	employeeList.add(new Employee(111, "Jiya Brein", 32, "Female", "HR", 2011, 25000.0));
@@ -96,21 +94,20 @@ public class Employee
 	employeeList.add(new Employee(255, "Ali Baig", 23, "Male", "Infrastructure", 2018, 12700.0));
 	employeeList.add(new Employee(266, "Sanvi Pandey", 26, "Female", "Product Development", 2015, 28900.0));
 	employeeList.add(new Employee(277, "Anuj Chettiar", 31, "Male", "Product Development", 2012, 35700.0));
-
 	
 //1 How many Male & Female employee
 	Map<String, Long> noOfMaleAndFemaleEmployees = 
 		employeeList
 		.stream()
 		.collect(Collectors.groupingBy(Employee::getGender,Collectors.counting()));
-	
-		System.out.println(noOfMaleAndFemaleEmployees);
+	System.out.println(noOfMaleAndFemaleEmployees);
+		
 		//OR
+	
 	Map<String, Long> noOfMaleAndFemaleEmployees1 = 
 			employeeList
 			.stream()
 			.collect(Collectors.groupingBy(e->e.getGender(),Collectors.counting()));
-			
 			System.out.println(noOfMaleAndFemaleEmployees1);
 	
 //2 Name of all departments
@@ -119,22 +116,27 @@ public class Employee
 						.distinct()
 						.forEach(System.out::println);
 			//or
+			
 			employeeList.stream()
 						.map(e->e.getDepartment())
 						.distinct()
 						.forEach(System.out::println);
+			
 //3 Average age of male & female
 			Map<String, Double> avgAgeOfMaleAndFemaleEmployees = 
 					employeeList.stream()
 					.collect(Collectors.groupingBy(Employee::getGender,Collectors.averagingInt(Employee::getAge)));
 			System.out.println(avgAgeOfMaleAndFemaleEmployees);
+			
 // total employee in HR department
 			Long totalEmployeeInHRDepartment = 
 					employeeList.stream()
 					.filter(e->e.getDepartment()=="HR")
 					.collect(Collectors.counting());
 			System.out.println(totalEmployeeInHRDepartment);
+			
 			//OR
+			
 			Map<Object, Long> totalEmployeeInHRDepartment1 = 
 					employeeList.stream()
 					.filter(e->e.getDepartment()=="HR")
