@@ -105,10 +105,12 @@ public class Employee
 //			stream.max(Comparator.comparingInt(comaprevalue)), 
 //			stream.min(Comparator.comparingInt(comaprevalue)) stream method
 //			returns maximum element wrapped in an Optional object.
-//			Theses methos are same and return optional<>
+//			Theses methods are same and return optional<>
+//	Note: - All Collectors.() methods calls within collect() method
 
 
 //1 How many Male & Female employee
+System.out.println("======== no of male and female employee =========");
 	Map<String, Long> noOfMaleAndFemaleEmployees = 
 		employeeList
 		.stream()
@@ -124,18 +126,17 @@ public class Employee
 			System.out.println(noOfMaleAndFemaleEmployees1);
 	
 //2 Name of all departments
+System.out.println("======== name of all departments =========");
 			employeeList.stream()
 						.map(Employee::getDepartment)
 						.distinct()
 						.forEach(System.out::println);
-			//or
-			
+			//or			
 			employeeList.stream()
 						.map(e->e.getDepartment())
 						.distinct()
 						.forEach(System.out::println);
-			//OR
-			
+			//OR			
 			List<String> collect = 
 					employeeList.stream()
 							.map(e->e.getDepartment())
@@ -144,12 +145,14 @@ public class Employee
 			System.out.println(collect);
 			
 //3 Average age of male & female
+System.out.println("======== Average age of amle & female employee =========");
 			Map<String, Double> avgAgeOfMaleAndFemaleEmployees = 
 					employeeList.stream()
 					.collect(Collectors.groupingBy(Employee::getGender,Collectors.averagingInt(Employee::getAge)));
 			System.out.println(avgAgeOfMaleAndFemaleEmployees);
 			
 // total employee in HR department
+System.out.println("======== total employee in HR department =========");
 			Long totalEmployeeInHRDepartment = 
 					employeeList.stream()
 					.filter(e->e.getDepartment()=="HR")
@@ -165,6 +168,7 @@ public class Employee
 			System.out.println(totalEmployeeInHRDepartment1);
 			
 // Average salary of Female employee
+System.out.println("======== Average salary of female employee =========");
 			Double avgSalaryOfFemaleEmployees = 
 					employeeList.stream()
 					.filter(e->e.getGender()=="Female")
@@ -177,6 +181,7 @@ public class Employee
 			System.out.println(avgSalaryOfFemaleEmployees1);
 
 //4 Get the details of highest paid employee in the organization?
+System.out.println("======== highest paid employee =========");
 			Optional<Employee> detailsOfHighestPaidEmployee = 
 					employeeList.stream()
 					.collect(Collectors.maxBy(Comparator.comparingDouble(e->e.getSalary())));
@@ -203,7 +208,7 @@ System.out.println("======= Details of employees who joined after 2015 =========
 			.forEach(System.out::println);
 
 //6 Count the number of employees in each department?
-
+System.out.println("======== number of employees in each department =========");
 			Map<String, Long> employeeCountByDepartment=
 			employeeList.stream().collect(Collectors.groupingBy(Employee::getDepartment, Collectors.counting()));
 			System.out.println(employeeCountByDepartment.toString());
