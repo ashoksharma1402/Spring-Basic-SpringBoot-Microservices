@@ -96,7 +96,15 @@ public class Employee
 	employeeList.add(new Employee(255, "Ali Baig", 23, "Male", "Infrastructure", 2018, 12700.0));
 	employeeList.add(new Employee(266, "Sanvi Pandey", 26, "Female", "Product Development", 2015, 28900.0));
 	employeeList.add(new Employee(277, "Anuj Chettiar", 31, "Male", "Product Development", 2012, 35700.0));
-	
+
+//	Note: - Map is used to get (or perform operation on) a particular field of every object 
+//	Note: - Filter and map return the object of streams so we can convert it through collect(Collectors.toList()
+//	Note: - collect () returns collection object may be
+//	Note: - Collectors.maxBy(Comparator.comparingInt(comaprevalue)) method, 
+//	max(Comparator.comparingInt(comaprevalue)), 
+//	min(Comparator.comparingInt(comaprevalue)) stream method
+//	returns maximum element wrapped in an Optional object. Or 
+
 //1 How many Male & Female employee
 	Map<String, Long> noOfMaleAndFemaleEmployees = 
 		employeeList
@@ -170,7 +178,10 @@ public class Employee
 					employeeList.stream()
 					.collect(Collectors.maxBy(Comparator.comparingDouble(e->e.getSalary())));
 			System.out.println(detailsOfHighestPaidEmployee.toString());
-
+			//or
+			Optional<Employee> detailsOfHighestPaidEmployee1 = 
+					employeeList.stream().max(Comparator.comparingDouble(e->e.getSalary()));
+			System.out.println("--"+detailsOfHighestPaidEmployee1.toString());
 //5 employee who joined after 2015
 System.out.println("========== name of employees who joined after 2015 ==========");
 			employeeList.stream()
