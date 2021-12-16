@@ -1,8 +1,10 @@
 package com.ashokit;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.*;
 
 public class Employee
@@ -121,6 +123,14 @@ public class Employee
 						.map(e->e.getDepartment())
 						.distinct()
 						.forEach(System.out::println);
+			//OR
+			
+			List<String> collect = 
+					employeeList.stream()
+							.map(e->e.getDepartment())
+							.distinct()
+							.collect(Collectors.toList()); // to convert Stream object into List collection object
+			System.out.println(collect);
 			
 //3 Average age of male & female
 			Map<String, Double> avgAgeOfMaleAndFemaleEmployees = 
@@ -155,6 +165,29 @@ public class Employee
 					.collect(Collectors.groupingBy(Employee::getGender,Collectors.averagingDouble(Employee::getSalary)));
 			System.out.println(avgSalaryOfFemaleEmployees1);
 
-//Get the details of highest paid employee in the organization?
+//4 Get the details of highest paid employee in the organization?
+			Optional<Employee> detailsOfHighestPaidEmployee = 
+					employeeList.stream()
+					.collect(Collectors.maxBy(Comparator.comparingDouble(e->e.getSalary())));
+			System.out.println(detailsOfHighestPaidEmployee.toString());
+
+//5 employee who joined after 2015
+System.out.println("========== name of employees who joined after 2015 ==========");
+			employeeList.stream()
+			.filter(e->e.getYearOfJoining()>2015)
+			.map(e->e.getName())
+			.forEach(System.out::println);
+
+System.out.println("======= Details of employees who joined after 2015 ==========");
+			employeeList.stream()
+			.filter(e->e.getYearOfJoining()>2015)
+			.forEach(System.out::println);
+
+//6 Count the number of employees in each department?
+
+			Map<String, Long> employeeCountByDepartment=
+			employeeList.stream().collect(Collectors.groupingBy(Employee::getDepartment, Collectors.counting()));
+			System.out.println(employeeCountByDepartment.toString());
+
 	}
 	}

@@ -111,6 +111,10 @@ employeeList.stream()
 .map(Employee::getDepartment)
 .distinct()
 .forEach(System.out::println);
+ //OR
+
+List<String> collect = employeeList.stream().map(e->e.getDepartment()).distinct().collect(Collectors.toList());
+System.out.println(collect);
 
 System.out.println("========================================================");
 System.out.println("average age of male and female employee: -");
