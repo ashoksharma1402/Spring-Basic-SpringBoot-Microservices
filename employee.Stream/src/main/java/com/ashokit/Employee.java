@@ -1,7 +1,21 @@
+//	Note: - Map is used to get (or perform operation on) a particular field of every object 
+//	Note: - Filter and map return the object of streams so we can convert it through collect(Collectors.toList() into collection
+//	Note: - collect () returns collection object may be based on parameter passed
+//	Note: - stream.collect(Collectors.maxBy(Comparator.comparingInt(comaprevalue))) method, 
+//			stream.collect(Collectors.minBy(Comparator.comparingInt(comaprevalue))) method,
+//			stream.max(Comparator.comparingInt(comaprevalue)), 
+//			stream.min(Comparator.comparingInt(comaprevalue)) stream method
+//			returns maximum element wrapped in an Optional object.
+//			Theses methods are same and return optional<> object
+//	Note: - All Collectors.() methods calls within collect() method
+//	Note: - We can use forEach(System.out::println) on collection and stream object.
+			// forEach with map collection we use enterySet().forEach(System.out::println)
+//	Note: - We can not print directly stream object reference variable so we change it in to collection by toList() like method 
 package com.ashokit;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -97,18 +111,6 @@ public class Employee
 	employeeList.add(new Employee(266, "Sanvi Pandey", 26, "Female", "Product Development", 2015, 28900.0));
 	employeeList.add(new Employee(277, "Anuj Chettiar", 31, "Male", "Product Development", 2012, 35700.0));
 
-//	Note: - Map is used to get (or perform operation on) a particular field of every object 
-//	Note: - Filter and map return the object of streams so we can convert it through collect(Collectors.toList()
-//	Note: - collect () returns collection object may be
-//	Note: - stream.collect(Collectors.maxBy(Comparator.comparingInt(comaprevalue))) method, 
-//			stream.collect(Collectors.minBy(Comparator.comparingInt(comaprevalue))) method,
-//			stream.max(Comparator.comparingInt(comaprevalue)), 
-//			stream.min(Comparator.comparingInt(comaprevalue)) stream method
-//			returns maximum element wrapped in an Optional object.
-//			Theses methods are same and return optional<>
-//	Note: - All Collectors.() methods calls within collect() method
-
-
 //1 How many Male & Female employee
 System.out.println("======== no of male and female employee =========");
 	Map<String, Long> noOfMaleAndFemaleEmployees = 
@@ -116,7 +118,7 @@ System.out.println("======== no of male and female employee =========");
 		.stream()
 		.collect(Collectors.groupingBy(Employee::getGender,Collectors.counting()));
 	System.out.println(noOfMaleAndFemaleEmployees);
-		
+	
 		//OR
 	
 	Map<String, Long> noOfMaleAndFemaleEmployees1 = 
@@ -212,6 +214,98 @@ System.out.println("======== number of employees in each department =========");
 			Map<String, Long> employeeCountByDepartment=
 			employeeList.stream().collect(Collectors.groupingBy(Employee::getDepartment, Collectors.counting()));
 			System.out.println(employeeCountByDepartment.toString());
-
+			//OR
+System.out.println("---------Another short way of printing data from map");
+            employeeList.stream().collect(Collectors.groupingBy(Employee::getDepartment, Collectors.counting()))
+            					.entrySet()
+            					.forEach(System.out::println);
+            //OR
+System.out.println("another method to print");
+			System.out.println(employeeCountByDepartment);
+			//OR
+System.out.println("2nd way of printing data from map");
+			employeeCountByDepartment.entrySet().forEach(e->{
+            	System.out.println(e.getKey()+"-----"+e.getValue());
+            });
+System.out.println("3rd way of printing data from map");
+            employeeCountByDepartment.forEach((k,v)->{
+            	System.out.println(k+"----"+v);
+            });  
+System.out.println("Another short way of printing data from map");
+            employeeCountByDepartment.entrySet().forEach(System.out::println);
+           					
+//7 What is the average salary of each department?
+System.out.println("===========average salary of each department=============================");           
+            employeeList.stream()
+            			.collect(Collectors.groupingBy(e->e.getDepartment(),Collectors.averagingDouble(t->t.getSalary())))
+            			.entrySet()
+            			.forEach(System.out::println);
+            
+// 8 Get the details of youngest male employee in the product development department?         
+            Employee employee = employeeList.stream()
+            .filter(e -> e.getGender()=="Male" && e.getDepartment()=="Product Development")
+            .min(Comparator.comparingInt(Employee::getAge)).get();
+            System.out.println(employee);
+//Explanation of previous method         
+            Optional<Employee> min = employeeList.stream()
+            			.filter(e->e.getGender()=="Male" && e.getDepartment()=="Product Development")
+            			.min(Comparator.comparingInt(t->t.getYearOfJoining()));
+            Employee youngestMaleEmployee  = min.get();
+            System.out.println(youngestMaleEmployee);
+            
+//query 3.9 : Who has the most working experience in the organization?
+System.out.println("-------------uery 3.9 : Who has the most working experience in the organization?--------------");
+            Employee employee2 = employeeList.stream()
+            								.min(Comparator.comparingInt(e->e.yearOfJoining))
+            								.get();
+System.out.println(employee2);
+            //OR
+            Employee employee3 = employeeList.stream()
+            								.sorted(Comparator.comparingInt(e->e.getYearOfJoining()))
+            								.findFirst()
+            								.get();
+System.out.println(employee3);
+            //OR
+System.out.println(employeeList.stream()
+            			.min(Comparator.comparingInt(e->e.getYearOfJoining()))
+            			.get());
+            //OR
+System.out.println(employeeList.stream()
+            			.sorted(Comparator.comparingInt(e->e.getYearOfJoining()))
+            			.findFirst()
+            			.get());
+//10 : How many male and female employees are there in the sales and marketing team?
+Map<String, Long> noOfMaleAndFemaleEmployeeInSales = 
+								employeeList.stream()
+								.filter(e->e.getDepartment()=="Sales And Marketing")
+								.collect(Collectors.groupingBy(t->t.getGender(),Collectors.counting()));
+     System.out.println(noOfMaleAndFemaleEmployeeInSales);            
+     //or
+     employeeList.stream()
+     			.filter(e->e.getDepartment()=="Sales And Marketing")
+     			.collect(Collectors.groupingBy(t->t.getGender(),Collectors.counting()))
+     			.entrySet()
+     			.forEach(System.out::println);
+// 11 : What is the average salary of male and female employees?
+     employeeList.stream()
+     				.collect(Collectors.groupingBy(e->e.getGender(), Collectors.averagingDouble(t->t.getSalary())))
+     				.entrySet()
+     				.forEach(System.out::println);
+//12 list of employee in each department
+    		 employeeList.stream()
+    		 			.collect(Collectors.groupingBy(Employee::getDepartment))
+    		 			.entrySet()
+    		 			.forEach(System.out::println);
+//13 : What is the average salary and total salary of the whole organization?
+    		 DoubleSummaryStatistics collect2 = employeeList.stream()
+    		 			.collect(Collectors.summarizingDouble(e->e.getSalary()));
+    		 System.out.println("Average salary of the organization = "+collect2.getAverage());
+    		 System.out.println("Total salary of the organization = "+collect2.getSum());
+    		 
+//14 : Separate the employees who are younger or equal to 25 years from those employees who are older than 25 years.
+     		//Map<Boolean, List<Employee>> collect3 = 
+    		 employeeList.stream()
+     					.collect(Collectors.partitioningBy(e->e.getAge()>25)).entrySet().forEach(System.out::println);
+ 				
 	}
 	}
